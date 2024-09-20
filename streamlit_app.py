@@ -23,10 +23,12 @@ if model_input:
         selected_part = filtered_df[filtered_df['Part Description (TCLNA)'] == part_description]
         
         if not selected_part.empty:
-            # Outcome: Display Part Number, Alternate Part Number, and Price
+            # Outcome: Display Part Number, Alternate Part Number, Price, Type, and Year Sold
             st.write(f"**Part Number**: {selected_part['Part No.'].values[0]}")
             st.write(f"**Alternate Part Number**: {selected_part['Alternate Part No.'].values[0]}")
             st.write(f"**Price**: ${selected_part['Price'].values[0]}")
+            st.write(f"**Type**: {selected_part['Type'].values[0]}")
+            st.write(f"**Year Sold**: {selected_part['Year Sold'].values[0]}")
         else:
             st.write("No parts found for the selected description.")
     else:
