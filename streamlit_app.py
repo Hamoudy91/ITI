@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 
 # Load the CSV file
-data_path = 'PartITIT2024 - Sheet1.csv'  # Update with your actual file name
+data_path = 'PartITIT2024 - Sheet1.csv'  # Update with your actual file path
+
 try:
     parts_df = pd.read_csv(data_path, sep=',', encoding='utf-8')
     st.write("Part Finder")
@@ -13,8 +14,11 @@ except pd.errors.ParserError:
     st.error(f"Error parsing the file: {data_path}. Please check the file formatting.")
     st.stop()
 
-# Clean up any potential spaces in the 'Price' column
-parts_df['Price'] = parts_df['Price'].astype(str).str.strip()
+# Display the column names to debug (if needed)
+# st.write(parts_df.columns)
+
+# Clean up the columns if necessary (e.g., removing extra spaces)
+parts_df.columns = parts_df.columns.str.strip()
 
 # User input for Model Number
 model_input = st.text_input("Enter your model number")
