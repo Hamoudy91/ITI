@@ -5,13 +5,16 @@ import pandas as pd
 data_path = 'PartITIT2024 - Sheet1.csv'  # Update with your actual file name
 try:
     parts_df = pd.read_csv(data_path, sep=',', encoding='utf-8')
-    st.write("File loaded successfully.")
+    st.write("Part Finder")
 except FileNotFoundError:
     st.error(f"File not found: {data_path}. Please ensure the file is uploaded.")
     st.stop()
 except pd.errors.ParserError:
     st.error(f"Error parsing the file: {data_path}. Please check the file formatting.")
     st.stop()
+
+# Clean up any potential spaces in the 'Price' column
+parts_df['Price'] = parts_df['Price'].astype(str).str.strip()
 
 # User input for Model Number
 model_input = st.text_input("Enter your model number")
