@@ -1,37 +1,23 @@
 import streamlit as st
 import pandas as pd
+import spacy
 
-# Load the CSV file from the repository (adjust the path if necessary)
-data_path = 'PartITI2024.csv'
-parts_df = pd.read_csv(data_path)
+# Load spaCy model for NLP
+nlp = spacy.load('en_core_web_sm')
 
-# Set up the Streamlit app interface
-st.title("Part Finder")
+# Load the updated CSV file
+data_path = 'PartITIT2024 - Sheet1.csv'  # Change the path based on the file
+try:
+    parts_df = pd.read_csv(data_path, sep=',', encoding='utf-8')
+    st.write("File loaded successfully.")
+except FileNotFoundError:
+    st.error(f"File not found: {data_path}. Please ensure the file is uploaded.")
+    st.stop()
+except pd.errors.ParserError:
+    st.error(f"Error parsing the file: {data_path}. Please check the file formatting.")
+    st.stop()
 
-# Step 1: Input box for model number
-model_input = st.text_input("Enter your model number", "")
+# Display file structure to debug issues
+st.write(parts_df.head())
 
-if model_input:
-    # Filter the data based on the model number
-    filtered_df = parts_df[parts_df['Model'] == model_input]
-    
-    if not filtered_df.empty:
-        # Step 2: Dropdown for part description (TCLNA)
-        part_description = st.selectbox("Select Part Description (TCLNA)", filtered_df['Part Description (TCLNA)'].unique())
-        
-        # Filter based on selected part description
-        selected_part = filtered_df[filtered_df['Part Description (TCLNA)'] == part_description]
-        
-        if not selected_part.empty:
-            # Outcome: Display Part Number, Alternate Part Number, Price, Type, and Year Sold
-            st.write(f"**Part Number**: {selected_part['Part No.'].values[0]}")
-            st.write(f"**Alternate Part Number**: {selected_part['Alternate Part No.'].values[0]}")
-            st.write(f"**Price**: ${selected_part['Price'].values[0]}")
-            st.write(f"**Type**: {selected_part['Type'].values[0]}")
-            st.write(f"**Year Sold**: {selected_part['Year Sold'].values[0]}")
-        else:
-            st.write("No parts found for the selected description.")
-    else:
-        st.write("Model number not found.")
-else:
-    st.write("Please enter a model number to get started.")
+# Continue the chatbot implementation or other functionalities here
